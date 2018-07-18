@@ -211,7 +211,7 @@ function matchCards () {
         enableCards();
     }, 1000);
     matchedCards = matchedCards.concat(openedCards);
-    if (matchedCards.length === 2) {
+    if (matchedCards.length === 24) {
         if (movesCounter > 12 && movesCounter < 18) {
             resultStars = 2;
             displayFinalMessage(ratingResult.medium);
