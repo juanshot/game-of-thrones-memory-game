@@ -61,26 +61,46 @@ const cardsList = [
         icon: 'img/tyrell-icon.png'
     }
 ];
+// Rating Messages
+const ratingResult = {
+    high: {
+        image: 'img/john.jpg',
+        message: 'You are the azor ahai!! You completed the game with 3 stars!!'
+    },
+    medium: {
+        image: 'img/tyrion.jpg',
+        message: 'You are pretty smart like tyrion. You completed the game with 2 stars!!'
+    },
+    low: {
+        image: 'img/joffrey.jpg',
+        message: 'You completed the game with one star, your character is joffrey....'
+    }
+}
 // ** VARIABLES //
 
 // Memory game dom elements
 const deck = document.querySelector('.deck');
 const cards = document.querySelectorAll('.card');
 const moves = document.querySelector('.moves');
-const restart = document.querySelector('.restart');
+const restart = document.querySelectorAll('.restart');
 const timer = document.querySelector('.timer');
 let stars = document.querySelectorAll('.fa-star');
 const audio = document.querySelector('audio');
 const message = document.querySelector('.message');
 const audioButton = document.querySelector('.music-icon');
+const modal = document.querySelector('#modalFinish');
+const closeBtn = document.querySelector('.close-btn');
+const resultMsg = document.querySelector('#result-msg');
 // Operational Variables'
 let gameStarted = false;
 let openedCards = [];
+let matchedCards = [];
 let movesCounter = 0;
 let hours = 0;
 let minutes = 0;
 let seconds = 0;
-let intervalId = null
+let intervalId = null;
+let resultStars = 3;
 // ** FUNCTIONS //
 
 // Main function that draws the deck
@@ -159,14 +179,29 @@ function increaseCounter () {
         stars[1].style.color = "grey"
     }
 }
+// disables cards
+function enableCards(){
+    cards.forEach((card) => {
+        card.classList.remove('disabled');
+    })
+
+}
+// enables cards
+function disableCards(){
+    cards.forEach((card) => {
+        console.log('en disable', card)
+    })
+}
+// function for unmatched cards
 function unmatchCards () {
     openedCards[0].classList.add('unmatch');
     openedCards[1].classList.add('unmatch');
     setTimeout(() => {
+        disableCards();
         openedCards[0].classList.remove('unmatch', 'open', 'disabled');
         openedCards[1].classList.remove('unmatch', 'open', 'disabled');
         openedCards = []
-    }, 1200)
+    }, 1000)
 }
 // function that matches cards
 function matchCards () {
@@ -174,6 +209,20 @@ function matchCards () {
     openedCards[1].classList.add("match");
     openedCards[0].classList.remove("show", "open");
     openedCards[1].classList.remove("show", "open");
+    matchedCards = matchedCards.concat(openedCards);
+    if (matchedCards.length === 24) {
+        if (movesCounter > 8 && movesCounter < 12) {
+            resultStars = 2
+            displayFinalMessage(ratingResult.medium)
+        } else if (movesCounter > 13) {
+            resultStars = 1
+            displayFinalMessage(ratingResult.low)
+        } else {
+            resultStars = 3
+            displayFinalMessage(ratingResult.high)
+        }
+       showModal();
+    }
     openedCards = [];
 }
 // function that starts timer
@@ -221,20 +270,53 @@ function changesSound () {
         audio.pause();
     }
 }
+// function that shows success message
+function showModal () {
+    modal.classList.add("show");
+}
+// function that closes success message
+function closeModal () {
+    modal.classList.remove("show");
+}
+// appends a result message depending on the rating
+function displayFinalMessage (message) {
+    while(resultMsg.firstChild) {
+        resultMsg.removeChild(resultMsg.firstChild)
+    }
+    let messageWrapper = document.createDocumentFragment();
+    let messageImage = document.createElement('img');
+    messageImage.setAttribute('src', message.image)
+    let messageText = document.createElement('h2');
+    messageText.textContent = message.message;
+    messageWrapper.appendChild(messageImage);
+    messageWrapper.appendChild(messageText);
+    resultMsg.appendChild(messageWrapper);
+    // show stats in result table
+    document.querySelector('#stars-result').textContent = resultStars;
+    document.querySelector('#movements-result').textContent = movesCounter;
+    document.querySelector('#time-result').textContent = `${hours}:${minutes}:${seconds}`;
+}
 // ** LISTENERS **//
 
 // listener that resets deck
-restart.addEventListener('click', () => {
-    drawDeck();
-    restartTimer();
-    audio.pause();
-    audioButton.style.color ="white"
-})
+restart.forEach((element) => {
+    element.addEventListener('click', () => {
+        drawDeck();
+        restartTimer();
+        audio.pause();
+        audioButton.style.color ="white";
+        closeModal();
+        matchedCards = [];
+    })
+});
 // listener that changes Audio
 audioButton.addEventListener('click', () => {
     changesSound();
-})
-
+});
+// listener for close modal btn
+closeBtn.addEventListener('click', () => {
+    closeModal();
+});
 // When browser is ready event
 document.addEventListener('DOMContentLoaded', () => {
     drawDeck();

@@ -139,6 +139,15 @@ h1 {
 	animation-duration: .75s;
 	background: #e2043b;
 }
+/* result stats */
+.result-stats {
+    text-align: center;
+    margin: 10px 50px 10px 50px;
+}
+.result-stats span {
+    font-weight: bold;
+    font-size: 1.5em;
+}
 
 /*
  * Styles for the Score Panel
@@ -175,4 +184,63 @@ h1 {
 .score-panel .restart {
     float: right;
     cursor: pointer;
+}
+/*   modal style */
+.dialog {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: rgba(0, 0, 0, 0.7);
+	transition: opacity 500ms;
+	visibility: hidden;
+	opacity: 0;
+}
+
+.dialog:target {
+	visibility: visible;
+	opacity: 1;
+}
+.modal {
+	margin: 70px auto;
+	padding: 20px;
+	background: #ffffff;
+	border-radius: 5px;
+	width: 85%;
+	position: relative;
+	transition: all 5s ease-in-out;
+	font-family: 'Gloria Hallelujah', cursive;
+}
+
+.modal .close-btn {
+	position: absolute;
+	top: 20px;
+	right: 30px;
+	transition: all 200ms;
+	font-size: 30px;
+	font-weight: bold;
+	text-decoration: none;
+	color: #333;
+}
+.modal .modal-content {
+    text-align: center;
+}
+.modal .modal-content .results-table {
+    width: 100%;
+}
+.modal .close:hover {
+	color: #02b3e4;
+}
+
+.modal .content-1,
+.content-2 {
+	max-height: 30%;
+	overflow: auto;
+	text-align: center;
+}
+
+.show {
+	visibility: visible !important;
+	opacity: 100 !important;
 }
