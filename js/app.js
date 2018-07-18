@@ -103,10 +103,10 @@ let intervalId = null;
 let resultStars = 3;
 // ** FUNCTIONS //
 
-// Main function that draws the deck
+//TODO: Main function that draws the deck
 function drawDeck () {
     while(deck.firstChild) {
-        deck.removeChild(deck.firstChild)
+        deck.removeChild(deck.firstChild);
     }
     // starting counter
     movesCounter = 0;
@@ -120,7 +120,7 @@ function drawDeck () {
     let cardsWrapper = document.createDocumentFragment();
     deckCards.forEach((element) => {
         let cardItem = document.createElement('li');
-        cardItem.classList.add('card')
+        cardItem.classList.add('card');
         let imageItem = document.createElement('img');
         imageItem.setAttribute('src', element.icon);
         cardItem.setAttribute('value', element.number);
@@ -132,7 +132,7 @@ function drawDeck () {
     });
     deck.appendChild(cardsWrapper);
 }
-// function thats shows the card
+//TODO: function thats shows the card
 function showCard(event) {
     if (!gameStarted) {
         startTimer();
@@ -154,7 +154,7 @@ function showCard(event) {
         }
     }
 }
-// Shuffle function from http://stackoverflow.com/a/2450976
+//TODO: Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
     while (currentIndex !== 0) {
@@ -164,68 +164,70 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
     return array;
 }
-// function than increases the moveCounter Variable
+//TODO: function than increases the moveCounter Variable
 function increaseCounter () {
     movesCounter++;
     moves.textContent = movesCounter;
     // Rating Stars Validations
-    if (movesCounter > 8 && movesCounter < 12) {
-        stars[2].style.color = "grey"
-    } else if (movesCounter > 13) {
-        stars[2].style.color = "grey"
-        stars[1].style.color = "grey"
+    if (movesCounter > 12 && movesCounter < 18) {
+        stars[2].style.color = "grey";
+    } else if (movesCounter > 18) {
+        stars[2].style.color = "grey";
+        stars[1].style.color = "grey";
     }
 }
-// disables cards
+//TODO: disables cards
 function enableCards(){
-    cards.forEach((card) => {
+    document.querySelectorAll('.card').forEach((card) => {
         card.classList.remove('disabled');
-    })
-
+    });
 }
-// enables cards
+//TODO: enables cards
 function disableCards(){
-    cards.forEach((card) => {
-        console.log('en disable', card)
-    })
+    document.querySelectorAll('.card').forEach((card) => {
+        card.classList.add('disabled');
+    });
 }
-// function for unmatched cards
+//TODO: function for unmatched cards
 function unmatchCards () {
+    disableCards();
     openedCards[0].classList.add('unmatch');
     openedCards[1].classList.add('unmatch');
     setTimeout(() => {
-        disableCards();
+        enableCards();
         openedCards[0].classList.remove('unmatch', 'open', 'disabled');
         openedCards[1].classList.remove('unmatch', 'open', 'disabled');
         openedCards = []
     }, 1000)
 }
-// function that matches cards
+//TODO: function that matches cards
 function matchCards () {
+    disableCards();
     openedCards[0].classList.add("match");
     openedCards[1].classList.add("match");
-    openedCards[0].classList.remove("show", "open");
-    openedCards[1].classList.remove("show", "open");
+    setTimeout(() => {
+        enableCards();
+    }, 1000);
     matchedCards = matchedCards.concat(openedCards);
-    if (matchedCards.length === 24) {
-        if (movesCounter > 8 && movesCounter < 12) {
-            resultStars = 2
-            displayFinalMessage(ratingResult.medium)
-        } else if (movesCounter > 13) {
+    if (matchedCards.length === 2) {
+        if (movesCounter > 12 && movesCounter < 18) {
+            resultStars = 2;
+            displayFinalMessage(ratingResult.medium);
+        } else if (movesCounter > 18) {
             resultStars = 1
-            displayFinalMessage(ratingResult.low)
+            displayFinalMessage(ratingResult.low);
         } else {
             resultStars = 3
-            displayFinalMessage(ratingResult.high)
+            displayFinalMessage(ratingResult.high);
         }
-       showModal();
+        clearInterval(intervalId);
+        showModal();
     }
     openedCards = [];
 }
-// function that starts timer
+//TODO: function that starts timer
 function startTimer () {
     intervalId = setInterval(() => {
         timer.textContent = `${hours}:${minutes}:${seconds}`;
@@ -239,28 +241,28 @@ function startTimer () {
             minutes = 0;
             seconds = 0;
         }
-    }, 1000)
+    }, 1000);
 }
-// restart the game function
+//TODO: restart the game function
 function restartTimer () {
     seconds = 0;
     minutes = 0;
     hours = 0;
     timer.textContent = `${hours}:${minutes}:${seconds}`;
-    intervalId ? clearInterval(intervalId) : null
+    intervalId ? clearInterval(intervalId) : null;
     gameStarted = false;
-    stars[2].style.color = 'yellow'
-    stars[1].style.color = 'yellow'
+    stars[2].style.color = 'yellow';
+    stars[1].style.color = 'yellow';
 }
-// function that shows a message
+//TODO: function that shows a message
 function showMessage (msg) {
     message.textContent = msg;
     message.style.visibility = 'visible';
     setTimeout(() => {
         message.style.visibility = 'hidden';
-    }, 3000)
+    }, 3000);
 }
-// function that changes the sound status
+//TODO: function that changes the sound status
 function changesSound () {
     if (audio.paused) {
         audio.play();
@@ -270,7 +272,7 @@ function changesSound () {
         audio.pause();
     }
 }
-// function that shows success message
+//TODO: function that shows success message
 function showModal () {
     modal.classList.add("show");
 }
@@ -278,14 +280,14 @@ function showModal () {
 function closeModal () {
     modal.classList.remove("show");
 }
-// appends a result message depending on the rating
+//TODO: appends a result message depending on the rating
 function displayFinalMessage (message) {
     while(resultMsg.firstChild) {
-        resultMsg.removeChild(resultMsg.firstChild)
+        resultMsg.removeChild(resultMsg.firstChild);
     }
     let messageWrapper = document.createDocumentFragment();
     let messageImage = document.createElement('img');
-    messageImage.setAttribute('src', message.image)
+    messageImage.setAttribute('src', message.image);
     let messageText = document.createElement('h2');
     messageText.textContent = message.message;
     messageWrapper.appendChild(messageImage);
@@ -316,6 +318,12 @@ audioButton.addEventListener('click', () => {
 // listener for close modal btn
 closeBtn.addEventListener('click', () => {
     closeModal();
+    drawDeck();
+    restartTimer();
+    audio.pause();
+    audioButton.style.color ="white";
+    closeModal();
+    matchedCards = [];
 });
 // When browser is ready event
 document.addEventListener('DOMContentLoaded', () => {
