@@ -156,7 +156,7 @@ function showCard(event) {
 }
 //TODO: Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    let currentIndex = array.length, temporaryValue, randomIndex;
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
@@ -171,9 +171,9 @@ function increaseCounter () {
     movesCounter++;
     moves.textContent = movesCounter;
     // Rating Stars Validations
-    if (movesCounter > 12 && movesCounter < 18) {
+    if (movesCounter > 18 && movesCounter < 24) {
         stars[2].style.color = "grey";
-    } else if (movesCounter > 18) {
+    } else if (movesCounter > 24) {
         stars[2].style.color = "grey";
         stars[1].style.color = "grey";
     }
@@ -212,7 +212,7 @@ function matchCards () {
     }, 1000);
     matchedCards = matchedCards.concat(openedCards);
     if (matchedCards.length === 24) {
-        if (movesCounter > 12 && movesCounter < 18) {
+        if (movesCounter > 18 && movesCounter < 24) {
             resultStars = 2;
             displayFinalMessage(ratingResult.medium);
         } else if (movesCounter > 18) {
